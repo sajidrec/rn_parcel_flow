@@ -1,0 +1,26 @@
+{
+  "expo": {
+    "name": "parcel_flow_app",
+    "slug": "parcel_flow_app",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "light",
+    "newArchEnabled": true,
+    "entryPoint": "./App.jsx",
+    "splash": {
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "ios": {
+      "supportsTablet": true
+    },
+    "android": {
+      "adaptiveIcon": {
+        "backgroundColor": "#ffffff"
+      },
+      "edgeToEdgeEnabled": true,
+      "package": "com.anonymous.parcel_flow_app"
+    },
+    "web": {}
+  }
+}
