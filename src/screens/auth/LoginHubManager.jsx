@@ -7,6 +7,7 @@ import SizedBox from '../../components/SizedBox'
 import { useNavigation } from '@react-navigation/native'
 import ROUTES from '../../navigation/routes'
 import { login } from '../../api/auth_hub_manager'
+import { saveToken } from '../../storage/auth_storage'
 
 const LoginHubManager = () => {
 
@@ -17,7 +18,20 @@ const LoginHubManager = () => {
 
   const tryLogin = async () => {
     try {
-      await login(email, pass);
+
+      const token = await login(email, pass);
+      console.log(token);
+
+      try {
+        await saveToken(token.access_token);
+
+        console.log('Token saved', token);
+      }
+      catch (e) {
+        console.log('Error while saving token', e);
+      }
+
+
       ToastAndroid.show('Welcome back!', ToastAndroid.SHORT);
       navigation.reset({
         index: 0,
