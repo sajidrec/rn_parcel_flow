@@ -8,7 +8,8 @@ export const login = async (email, password) => {
       {
         username: email,
         password: password,
-      }
+      },
+      { skipAuth: true }
     );
 
     return response.data;
