@@ -13,12 +13,13 @@ const LoginHubManager = () => {
 
   const [email, setEmail] = useState('');
   const [pass, setPass] = useState('');
+  const [loading, setLoading] = useState(false);
 
   const navigation = useNavigation();
 
   const tryLogin = async () => {
     try {
-
+      setLoading(true);
       const userInfo = await login(email, pass);
       console.log(userInfo);
 
@@ -26,9 +27,11 @@ const LoginHubManager = () => {
         await saveUserInfo(userInfo);
 
         console.log('user info saved : ', userInfo);
+        setLoading(false);
       }
       catch (e) {
         console.log('Error while saving user info : ', e);
+        setLoading(false);
       }
 
 
@@ -37,9 +40,11 @@ const LoginHubManager = () => {
         index: 0,
         routes: [{ name: ROUTES.HUB_MANAGER_HOME }],
       });
+      setLoading(false);
     }
     catch (e) {
       ToastAndroid.show(e.response.data.message, ToastAndroid.SHORT);
+      setLoading(false);
     }
   }
 
@@ -55,7 +60,7 @@ const LoginHubManager = () => {
 
       <InputComponent inputWidth='80%' type='password' value={pass} onChangeText={setPass} label='Enter password' />
 
-      <ButtonComponent width='80%' title='Login' onPress={tryLogin} />
+      {loading ? <Text>Loading...</Text> : <ButtonComponent width='80%' title='Login' onPress={tryLogin} disabled={loading} />} 
 
     </View>
   )

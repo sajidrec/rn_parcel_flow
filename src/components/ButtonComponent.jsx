@@ -10,10 +10,12 @@ const ButtonComponent = ({
   borderRadius = 8,
   style = {},
   textStyle = {},
+  disabled = false,
 }) => {
   return (
     <TouchableOpacity
       onPress={onPress}
+      disabled={disabled}
       style={[
         styles.button,
         {
