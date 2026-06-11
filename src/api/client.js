@@ -1,6 +1,8 @@
 import axios from 'axios';
 import { API_BASE_URL } from './config';
-import { getToken } from '../storage/auth_storage';
+import { getToken, logout } from '../storage/auth_storage';
+import { API_ROUTES } from './routes';
+import ROUTES from '../navigation/routes';
 
 const apiClient = axios.create({
   baseURL: API_BASE_URL,
@@ -29,6 +31,9 @@ apiClient.interceptors.response.use(
   (error) => {
     if (error.response?.status === 401) {
       console.log('Session expired, please log in again.');
+
+      logout();
+      useNavigation().navigate(ROUTES.LOGIN);
     }
     return Promise.reject(error);
   }

@@ -9,6 +9,7 @@ import SizedBox from '../../components/SizedBox';
 import InputComponent from '../../components/InputComponent';
 import { Picker } from '@react-native-picker/picker';
 import ButtonComponent from '../../components/ButtonComponent';
+import { createTask } from '../../api/tasks';
 
 const CreateTaskScreen = () => {
 
@@ -105,7 +106,7 @@ const CreateTaskScreen = () => {
   const totalPrice =
     Number(weight || 0) * Number(pricePerKg || 0);
 
-  const handleCreateTask = () => {
+  const handleCreateTask = async () => {
     if (!images.length) {
       Alert.alert('Please select at least one image');
       return;
@@ -116,20 +117,43 @@ const CreateTaskScreen = () => {
       return;
     }
 
+    if (!sourceLocation.latitude) {
+      Alert.alert('Source location not found. Please wait for location to load.');
+      return;
+    }
+
     if (!destinationLocation.latitude) {
       Alert.alert('Destination is required');
       return;
     }
 
-    const payload = {
-      images,
-      title,
-      description,
-      sourceLocation,
-      destinationLocation,
-    };
+    const formData = new FormData();
 
-    console.log('payload : ', payload);
+    images.forEach((uri, index) => {
+      formData.append('images', {
+        uri,
+        type: 'image/jpeg',
+        name: `image_${index}.jpg`,
+      });
+    });
+
+    formData.append('title', title);
+    formData.append('description', description);
+
+    formData.append('sourceLocation', JSON.stringify(sourceLocation));
+    formData.append('destinationLocation', JSON.stringify(destinationLocation));
+
+    console.log('formData entries:');
+    for (const pair of (formData)._parts || []) {
+      console.log(pair[0], ':', pair[1]);
+    }
+
+    try {
+      await createTask(formData);
+      Alert.alert('Success', 'Task created successfully!');
+    } catch (error) {
+      Alert.alert('Error', error.response?.data?.message || 'Failed to create task');
+    }
   };
 
   return (
