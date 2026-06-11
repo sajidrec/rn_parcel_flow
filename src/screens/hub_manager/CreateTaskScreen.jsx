@@ -25,6 +25,8 @@ const CreateTaskScreen = () => {
     longitude: null,
   });
 
+  const [createTaskLoading, setCreateTaskLoading] = useState(false);
+
   const [destinationLocation, setDestinationLocation] = useState({
     latitude: null,
     longitude: null,
@@ -107,23 +109,28 @@ const CreateTaskScreen = () => {
     Number(weight || 0) * Number(pricePerKg || 0);
 
   const handleCreateTask = async () => {
+    setCreateTaskLoading(true);
     if (!images.length) {
       Alert.alert('Please select at least one image');
+      setCreateTaskLoading(false);
       return;
     }
 
     if (!title.trim()) {
       Alert.alert('Title is required');
+      setCreateTaskLoading(false);
       return;
     }
 
     if (!sourceLocation.latitude) {
       Alert.alert('Source location not found. Please wait for location to load.');
+      setCreateTaskLoading(false);
       return;
     }
 
     if (!destinationLocation.latitude) {
       Alert.alert('Destination is required');
+      setCreateTaskLoading(false);
       return;
     }
 
@@ -151,8 +158,10 @@ const CreateTaskScreen = () => {
     try {
       await createTask(formData);
       Alert.alert('Success', 'Task created successfully!');
+      setCreateTaskLoading(false);
     } catch (error) {
       Alert.alert('Error', error.response?.data?.message || 'Failed to create task');
+      setCreateTaskLoading(false);
     }
   };
 
@@ -229,10 +238,11 @@ const CreateTaskScreen = () => {
 
       <SizedBox />
 
-      <ButtonComponent
+      {createTaskLoading ? <Text style={{ textAlign: 'center', fontSize: 16, }}>Loading...</Text> : <ButtonComponent
         title="Create Task"
         onPress={handleCreateTask}
-      />
+      />}
+
 
     </ScrollView>
   )
