@@ -11,3 +11,9 @@ export const createTask = async (
 
   return response.data;
 };
+
+export const getTaskList = async () => {
+  const response = await apiClient.get(API_ROUTES.TASKS.GET_TASKS);
+
+  return response.data;
+}
