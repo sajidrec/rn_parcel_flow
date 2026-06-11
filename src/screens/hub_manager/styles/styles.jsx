@@ -4,6 +4,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     margin: 5,
+    alignItems: 'center',
   },
   headingText: {
     fontSize: 35,
