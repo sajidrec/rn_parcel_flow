@@ -18,7 +18,7 @@ const LoginParcelRider = () => {
         <SizedBox height={20} />
       </>
 
-      <InputComponent inputWidth='80%' type='email' value={email} onChangeText={setEmail} label='Enter email address' />
+      <InputComponent inputWidth='80%' type='email' value={email} onChangeText={setEmail} label='Enter username' />
 
       <InputComponent inputWidth='80%' type='password' value={pass} onChangeText={setPass} label='Enter password' />
 

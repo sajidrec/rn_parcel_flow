@@ -7,7 +7,7 @@ import SizedBox from '../../components/SizedBox'
 import { useNavigation } from '@react-navigation/native'
 import ROUTES from '../../navigation/routes'
 import { login } from '../../api/auth_hub_manager'
-import { saveToken } from '../../storage/auth_storage'
+import { saveToken, saveUserInfo } from '../../storage/auth_storage'
 
 const LoginHubManager = () => {
 
@@ -19,16 +19,16 @@ const LoginHubManager = () => {
   const tryLogin = async () => {
     try {
 
-      const token = await login(email, pass);
-      console.log(token);
+      const userInfo = await login(email, pass);
+      console.log(userInfo);
 
       try {
-        await saveToken(token.access_token);
+        await saveUserInfo(userInfo);
 
-        console.log('Token saved', token);
+        console.log('user info saved : ', userInfo);
       }
       catch (e) {
-        console.log('Error while saving token', e);
+        console.log('Error while saving user info : ', e);
       }
 
 
@@ -51,7 +51,7 @@ const LoginHubManager = () => {
         <SizedBox height={20} />
       </>
 
-      <InputComponent inputWidth='80%' type='email' value={email} onChangeText={setEmail} label='Enter email address' />
+      <InputComponent inputWidth='80%' type='email' value={email} onChangeText={setEmail} label='Enter username' />
 
       <InputComponent inputWidth='80%' type='password' value={pass} onChangeText={setPass} label='Enter password' />
 

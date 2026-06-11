@@ -6,45 +6,45 @@ import ROUTES from '../../navigation/routes';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const SplashScreen = () => {
-
   const navigation = useNavigation();
 
   useEffect(() => {
-
-    const checkToken = async () => {
-
+    const checkUser = async () => {
       try {
+        const userInfoString = await AsyncStorage.getItem('userInfo');
 
-        const token =
-          await AsyncStorage.getItem('token');
+        const userInfo = userInfoString
+          ? JSON.parse(userInfoString)
+          : null;
 
-        console.log('fetched token is ', token);
+        console.log('fetched user info:', userInfo);
 
         setTimeout(() => {
-
-          if (token) {
-            navigation.reset({
-              index: 0,
-              routes: [
-                {
-                  name: ROUTES.HUB_MANAGER_HOME,
-                },
-              ],
-            });
+          if (userInfo?.access_token) {
+            if (userInfo.user_type === 'hub_manager') {
+              navigation.reset({
+                index: 0,
+                routes: [
+                  {
+                    name: ROUTES.HUB_MANAGER_HOME,
+                  },
+                ],
+              });
+            } else {
+              // TODO: goto rider home when implemented
+            }
           } else {
             navigation.replace(ROUTES.LOGIN);
           }
-
         }, 2000);
-
       } catch (e) {
+        console.error(e);
         navigation.replace(ROUTES.LOGIN);
       }
     };
 
-    checkToken();
-
-  }, []);
+    checkUser();
+  }, [navigation]);
 
   return (
     <View style={styles.container}>

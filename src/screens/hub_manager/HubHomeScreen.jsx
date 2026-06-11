@@ -23,7 +23,7 @@ const HubHomeScreen = () => {
           style: 'destructive',
           onPress: async () => {
 
-            await AsyncStorage.removeItem('token');
+            await AsyncStorage.removeItem('userInfo');
 
             navigation.reset({
               index: 0,
