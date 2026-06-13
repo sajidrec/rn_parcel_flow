@@ -10,6 +10,7 @@ import InputComponent from '../../components/InputComponent';
 import { Picker } from '@react-native-picker/picker';
 import ButtonComponent from '../../components/ButtonComponent';
 import { createTask } from '../../api/tasks';
+import { useNavigation } from '@react-navigation/native';
 
 const CreateTaskScreen = () => {
 
@@ -105,8 +106,7 @@ const CreateTaskScreen = () => {
     init();
   }, []);
 
-  const totalPrice =
-    Number(weight || 0) * Number(pricePerKg || 0);
+  const navigation = useNavigation();
 
   const handleCreateTask = async () => {
     setCreateTaskLoading(true);
@@ -155,12 +155,16 @@ const CreateTaskScreen = () => {
       console.log(pair[0], ':', pair[1]);
     }
 
+
     try {
       await createTask(formData);
       Alert.alert('Success', 'Task created successfully!');
       setCreateTaskLoading(false);
+      navigation.goBack();
+
     } catch (error) {
       Alert.alert('Error', error.response?.data?.message || 'Failed to create task');
+      console.log(error);
       setCreateTaskLoading(false);
     }
   };

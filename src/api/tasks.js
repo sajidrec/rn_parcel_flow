@@ -17,3 +17,7 @@ export const getTaskList = async () => {
 
   return response.data;
 }
+
+export const deleteTask = async (id) => {
+  await apiClient.delete(API_ROUTES.TASKS.DELETE_TASK(id));
+};

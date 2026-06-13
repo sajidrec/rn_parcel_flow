@@ -1,15 +1,16 @@
 import { View, Text, Pressable, Alert, FlatList } from 'react-native';
 import styles from './styles/styles';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import ROUTES from '../../navigation/routes';
-import ButtonComponent from '../../components/ButtonComponent.jsx'
-import '../../components/SizedBox.jsx'
+import ButtonComponent from '../../components/ButtonComponent.jsx';
+import '../../components/SizedBox.jsx';
 import SizedBox from '../../components/SizedBox.jsx';
 import { useEffect, useState } from 'react';
-import { getTaskList } from '../../api/tasks.js';
+import { deleteTask, getTaskList } from '../../api/tasks.js';
 import { Image } from 'react-native';
-import { API_BASE_URL } from '../../api/config.js'
+import { API_BASE_URL } from '../../api/config.js';
+import { useCallback } from 'react';
 
 const HubHomeScreen = () => {
 
@@ -50,18 +51,23 @@ const HubHomeScreen = () => {
   };
 
   const fetchTaskList = async () => {
+    setRefreshing(true);
     try {
       const data = await getTaskList();
       setTaskLists(data);
     } catch (e) {
       console.log(e);
     }
+    finally {
+      setRefreshing(false);
+    }
   };
 
-  useEffect(() => {
-
-    fetchTaskList();
-  }, []);
+  useFocusEffect(
+    useCallback(() => {
+      fetchTaskList();
+    }, [])
+  );
 
   const onRefresh = async () => {
     setRefreshing(true);
@@ -75,35 +81,71 @@ const HubHomeScreen = () => {
 
       <SizedBox height={25} />
 
-      <FlatList
-        data={taskLists}
+      <FlatList style={{ width: '90%' }}
+        data={[...taskLists].reverse()}
         keyExtractor={(item) => item.id}
         refreshing={refreshing}
         onRefresh={onRefresh}
         renderItem={({ item }) => (
           <View style={{ marginBottom: 16 }}>
-            <Text>{item.title}</Text>
-
+            <Text style={{ fontSize: 18, fontWeight: 'bold' }}>{item.title}</Text>
+            <Text style={{ fontSize: 16, color: '#333' }}>{item.description}</Text>
             {item.images?.length > 0 && (
               <Image
                 source={{
                   uri: `${API_BASE_URL}/uploads/tasks/${item.images[0]}`,
                 }}
                 style={{
-                  width: 120,
-                  height: 120,
+                  width: '200',
+                  height: '200',
                   borderRadius: 8,
-                  marginTop: 8,
                 }}
               />
             )}
+
+            <SizedBox />
+
+            <ButtonComponent title='Delete' onPress={async () => {
+              Alert.alert(
+                'Delete Item',
+                'Are you sure?',
+                [
+                  {
+                    text: 'Cancel',
+                    style: 'cancel',
+                    onPress: () => console.log('Cancelled', item.id),
+                  },
+                  {
+                    text: 'Delete',
+                    style: 'destructive',
+                    onPress: async () => {
+                      setRefreshing(true);
+                      try {
+
+                        await deleteTask(item.id);
+
+                        await fetchTaskList();
+
+                      } catch (error) {
+                        console.log(error);
+                      }
+                      finally {
+                        setRefreshing(false);
+                      }
+
+                    },
+                  },
+                ]
+              );
+            }} />
+
           </View>
         )}
       />
 
       <SizedBox height={25} />
-      <ButtonComponent width='80%' title='Create New Task' onPress={() => navigation.navigate(ROUTES.CREATE_TASK)} />
-
+      <ButtonComponent width='95%' title='Create New Task' bgColor='#156920' onPress={() => navigation.navigate(ROUTES.CREATE_TASK)} />
+      <SizedBox />
 
     </View>
   )
