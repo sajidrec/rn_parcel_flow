@@ -21,3 +21,10 @@ export const getTaskList = async () => {
 export const deleteTask = async (id) => {
   await apiClient.delete(API_ROUTES.TASKS.DELETE_TASK(id));
 };
+
+export const updateTask = async (id, formData) => {
+  const response = await apiClient.patch(API_ROUTES.TASKS.UPDATE_TASK(id), formData, {
+    headers: { 'Content-Type': 'multipart/form-data' },
+  });
+  return response.data;
+}

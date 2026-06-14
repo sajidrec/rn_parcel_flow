@@ -34,9 +34,6 @@ const CreateTaskScreen = () => {
     name: '',
   });
 
-  const [weight, setWeight] = useState('1');
-  const [pricePerKg, setPricePerKg] = useState('1');
-
   const locations = {
     Gulshan: { latitude: 23.7806, longitude: 90.4193 },
     Banani: { latitude: 23.7935, longitude: 90.4066 },

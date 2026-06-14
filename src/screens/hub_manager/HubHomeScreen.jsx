@@ -96,48 +96,61 @@ const HubHomeScreen = () => {
                   uri: `${API_BASE_URL}/uploads/tasks/${item.images[0]}`,
                 }}
                 style={{
-                  width: '200',
-                  height: '200',
-                  borderRadius: 8,
+                  resizeMode: 'contain',
+                  height: 200,
                 }}
               />
             )}
 
             <SizedBox />
 
-            <ButtonComponent title='Delete' onPress={async () => {
-              Alert.alert(
-                'Delete Item',
-                'Are you sure?',
-                [
-                  {
-                    text: 'Cancel',
-                    style: 'cancel',
-                    onPress: () => console.log('Cancelled', item.id),
-                  },
-                  {
-                    text: 'Delete',
-                    style: 'destructive',
-                    onPress: async () => {
-                      setRefreshing(true);
-                      try {
+            <View style={{ flexDirection: 'row', gap: 10 }}>
+              <View style={{ flex: 1 }}>
+                <ButtonComponent style={{ flex: 1 }} title='Delete' onPress={async () => {
+                  Alert.alert(
+                    'Delete Item',
+                    'Are you sure?',
+                    [
+                      {
+                        text: 'Cancel',
+                        style: 'cancel',
+                        onPress: () => console.log('Cancelled', item.id),
+                      },
+                      {
+                        text: 'Delete',
+                        style: 'destructive',
+                        onPress: async () => {
+                          setRefreshing(true);
+                          try {
 
-                        await deleteTask(item.id);
+                            await deleteTask(item.id);
 
-                        await fetchTaskList();
+                            await fetchTaskList();
 
-                      } catch (error) {
-                        console.log(error);
-                      }
-                      finally {
-                        setRefreshing(false);
-                      }
+                          } catch (error) {
+                            console.log(error);
+                          }
+                          finally {
+                            setRefreshing(false);
+                          }
 
-                    },
-                  },
-                ]
-              );
-            }} />
+                        },
+                      },
+                    ]
+                  );
+                }} />
+              </View>
+              <View style={{ flex: 1 }}>
+                <ButtonComponent title='Update' onPress={async () => {
+                  navigation.navigate(ROUTES.UPDATE_HUB_TASK, {
+                    task: item
+                  });
+                }} />
+              </View>
+
+            </View>
+
+
 
           </View>
         )}
