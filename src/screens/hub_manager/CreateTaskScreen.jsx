@@ -78,6 +78,7 @@ const CreateTaskScreen = () => {
     setSourceLocation({
       latitude: loc.coords.latitude,
       longitude: loc.coords.longitude,
+      name: sourcePlaceName,
     });
 
     const [place] = await Location.reverseGeocodeAsync({

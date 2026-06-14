@@ -4,6 +4,17 @@ import ROUTES from '../../navigation/routes';
 import styles from './styles/style';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
+import SizedBox from '../../components/SizedBox';
+import { useState } from 'react';
+import { useFocusEffect } from '@react-navigation/native';
+import { getTaskList } from '../../api/tasks.js';
+import { useCallback } from 'react';
+import { FlatList } from 'react-native';
+import { Image } from 'react-native';
+import { API_BASE_URL } from '../../api/config.js';
+import ButtonComponent from '../../components/ButtonComponent.jsx';
+import { deleteTask } from '../../api/tasks.js';
+
 
 const ParcelRiderHomeScreen = () => {
 
@@ -39,9 +50,93 @@ const ParcelRiderHomeScreen = () => {
     );
   };
 
+  const [taskLists, setTaskLists] = useState([]);
+  const [refreshing, setRefreshing] = useState(false);
+
+  const fetchTaskList = async () => {
+    setRefreshing(true);
+    try {
+      const data = await getTaskList();
+      setTaskLists(data);
+    } catch (e) {
+      console.log(e);
+    }
+    finally {
+      setRefreshing(false);
+    }
+  };
+
+  useFocusEffect(
+    useCallback(() => {
+      fetchTaskList();
+    }, [])
+  );
+
+  const onRefresh = async () => {
+    setRefreshing(true);
+    await fetchTaskList();
+    setRefreshing(false);
+  };
   return (
     <View style={styles.container}>
       <Pressable style={{ backgroundColor: "#f70e0e", padding: '1%', margin: "1%", justifyContent: 'center', alignItems: 'center', borderRadius: 5, height: '6%', width: '30%', alignSelf: 'flex-end' }} onPress={handleLogout}><Text style={{ color: "#fff", fontSize: 18, fontWeight: 'bold' }}>Logout</Text></Pressable>
+      <SizedBox />
+
+      <FlatList style={{ width: '90%' }}
+        contentContainerStyle={{ flexGrow: 1 }}
+        data={[...taskLists].reverse()}
+        keyExtractor={(item) => item.id}
+        refreshing={refreshing}
+        onRefresh={onRefresh}
+        renderItem={({ item }) => (
+          console.log(item),
+          <View style={{ marginBottom: 16 }}>
+            <Text style={{ fontSize: 18, fontWeight: 'bold' }}>{item.title}</Text>
+            <Text style={{ fontSize: 16, color: '#333' }}>{item.description}</Text>
+            <Text style={{ fontSize: 16, color: '#333' }}>Destination Hub : {item.destinationLocation?.name ?? 'N/A'}</Text>
+            {item.images?.length > 0 && (
+              <Image
+                source={{
+                  uri: `${API_BASE_URL}/uploads/tasks/${item.images[0]}`,
+                }}
+                style={{
+                  resizeMode: 'contain',
+                  height: 200,
+                }}
+              />
+            )}
+
+            <SizedBox />
+
+            <View style={{ flexDirection: 'row', gap: 10 }}>
+              <View style={{ flex: 1 }}>
+                <ButtonComponent style={{ flex: 1 }} title='Pick Up' onPress={async () => {
+                  Alert.alert(
+                    'Confirm Pick Up',
+                    'Are you sure?',
+                    [
+                      {
+                        text: 'Cancel',
+                        style: 'cancel',
+                        onPress: () => console.log('Cancelled', item.id),
+                      },
+                      {
+                        text: 'Pick Up',
+                        style: 'destructive',
+                        onPress: async () => {
+                          console.log('Picked the item', item.id);
+                        },
+                      },
+                    ]
+                  );
+                }} />
+              </View>
+
+            </View>
+
+          </View>
+        )}
+      />
     </View>
   )
 }

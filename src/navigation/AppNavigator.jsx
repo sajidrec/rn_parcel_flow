@@ -6,10 +6,10 @@ import SplashScreen from '../screens/auth/SplashScreen';
 import LoginScreen from '../screens/auth/LoginScreen';
 import LoginHubManager from '../screens/auth/LoginHubManager';
 import LoginParcelRider from '../screens/auth/LoginParcelRider';
-import HubHomeScreen from '../screens/hub_manager/HubHomeScreen';
 import CreateTaskScreen from '../screens/hub_manager/CreateTaskScreen';
 import HubUpdateTaskScreen from '../screens/hub_manager/HubUpdateTaskScreen';
 import ParcelRiderHomeScreen from '../screens/parcel_rider/ParcelRiderHomeScreen';
+import HubHomeScreen from '../screens/hub_manager/HubHomeScreen';
 
 const Stack = createStackNavigator();
 

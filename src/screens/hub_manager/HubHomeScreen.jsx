@@ -6,13 +6,13 @@ import ROUTES from '../../navigation/routes';
 import ButtonComponent from '../../components/ButtonComponent.jsx';
 import '../../components/SizedBox.jsx';
 import SizedBox from '../../components/SizedBox.jsx';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { deleteTask, getTaskList } from '../../api/tasks.js';
 import { Image } from 'react-native';
 import { API_BASE_URL } from '../../api/config.js';
 import { useCallback } from 'react';
 
-const HubHomeScreen = () => {
+const ParcelRiderHomeScreen = () => {
 
   const [taskLists, setTaskLists] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
@@ -20,7 +20,6 @@ const HubHomeScreen = () => {
   const navigation = useNavigation();
 
   const handleLogout = () => {
-
     Alert.alert(
       'Logout',
       'Are you sure you want to logout?',
@@ -164,4 +163,4 @@ const HubHomeScreen = () => {
   )
 }
 
-export default HubHomeScreen
+export default ParcelRiderHomeScreen
