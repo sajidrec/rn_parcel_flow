@@ -6,7 +6,8 @@ const ROUTES = {
   HUB_MANAGER_HOME: 'HubManagerHome',
   CREATE_TASK: 'CreateTask',
   UPDATE_HUB_TASK: 'UpdateHubTask',
-  PARCEL_RIDER_HOME: 'ParcelRiderHome'
+  PARCEL_RIDER_HOME: 'ParcelRiderHome',
+  MAP: 'MapScreen',
 }
 
 export default ROUTES

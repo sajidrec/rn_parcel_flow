@@ -13,8 +13,7 @@ import { FlatList } from 'react-native';
 import { Image } from 'react-native';
 import { API_BASE_URL } from '../../api/config.js';
 import ButtonComponent from '../../components/ButtonComponent.jsx';
-import { deleteTask } from '../../api/tasks.js';
-
+import * as Location from 'expo-location';
 
 const ParcelRiderHomeScreen = () => {
 
@@ -124,7 +123,30 @@ const ParcelRiderHomeScreen = () => {
                         text: 'Pick Up',
                         style: 'destructive',
                         onPress: async () => {
-                          console.log('Picked the item', item.id);
+                          const { status } = await Location.requestForegroundPermissionsAsync();
+                          console.log(status);
+                          if (status !== 'granted') {
+                            Alert.alert('Permission denied', 'Location permission is required.');
+                            return;
+                          }
+
+                          const location = await Location.getCurrentPositionAsync({
+                            accuracy: Location.Accuracy.High,
+                          });
+
+                          const placeName = await Location.reverseGeocodeAsync({
+                            latitude: location.coords.latitude,
+                            longitude: location.coords.longitude,
+                          });
+
+                          const updatedTask = {
+                            ...item,
+                            sourceLocation: {
+                              latitude: location.coords.latitude,
+                              longitude: location.coords.longitude,
+                            },
+                          };
+                          navigation.navigate(ROUTES.MAP, { task: updatedTask });
                         },
                       },
                     ]

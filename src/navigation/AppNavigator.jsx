@@ -10,6 +10,7 @@ import CreateTaskScreen from '../screens/hub_manager/CreateTaskScreen';
 import HubUpdateTaskScreen from '../screens/hub_manager/HubUpdateTaskScreen';
 import ParcelRiderHomeScreen from '../screens/parcel_rider/ParcelRiderHomeScreen';
 import HubHomeScreen from '../screens/hub_manager/HubHomeScreen';
+import MapScreen from '../screens/map/MapScreen';
 
 const Stack = createStackNavigator();
 
@@ -37,6 +38,8 @@ export default function AppNavigator() {
         <Stack.Screen name={ROUTES.UPDATE_HUB_TASK} component={HubUpdateTaskScreen} />
 
         <Stack.Screen name={ROUTES.PARCEL_RIDER_HOME} component={ParcelRiderHomeScreen} />
+
+        <Stack.Screen name={ROUTES.MAP} component={MapScreen} />
 
       </Stack.Navigator>
     </NavigationContainer>
