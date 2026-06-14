@@ -1,4 +1,4 @@
-import { NavigationContainer } from '@react-navigation/native';
+import { NavigationContainer, createNavigationContainerRef } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import ROUTES from './routes';
 
@@ -11,9 +11,11 @@ import CreateTaskScreen from '../screens/hub_manager/CreateTaskScreen';
 
 const Stack = createStackNavigator();
 
+export const navigationRef = createNavigationContainerRef();
+
 export default function AppNavigator() {
   return (
-    <NavigationContainer>
+    <NavigationContainer ref={navigationRef}>
       <Stack.Navigator
         initialRouteName={ROUTES.SPLASH}
         screenOptions={{ headerShown: false }}
