@@ -5,7 +5,8 @@ const ROUTES = {
   LOGIN_PARCEL_RIDER: 'LoginParcelRider',
   HUB_MANAGER_HOME: 'HubManagerHome',
   CREATE_TASK: 'CreateTask',
-  UPDATE_HUB_TASK: 'UpdateHubTask'
+  UPDATE_HUB_TASK: 'UpdateHubTask',
+  PARCEL_RIDER_HOME: 'ParcelRiderHome'
 }
 
 export default ROUTES

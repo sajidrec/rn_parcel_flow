@@ -1,12 +1,12 @@
 import apiClient from './client';
 import { API_ROUTES } from './routes';
 
-export const login = async (userName, password) => {
+export const login = async (email, password) => {
   try {
     const response = await apiClient.post(
-      API_ROUTES.AUTH.LOGIN_HUB_MANAGER,
+      API_ROUTES.AUTH.LOGIN_PARCEL_RIDER,
       {
-        username: userName,
+        username: email,
         password: password,
       },
       { skipAuth: true }

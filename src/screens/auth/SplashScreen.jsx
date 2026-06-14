@@ -30,8 +30,16 @@ const SplashScreen = () => {
                   },
                 ],
               });
-            } else {
-              // TODO: goto rider home when implemented
+            } else if (userInfo.user_type === 'rider') {
+
+              navigation.reset({
+                index: 0,
+                routes: [
+                  {
+                    name: ROUTES.PARCEL_RIDER_HOME,
+                  },
+                ],
+              });
             }
           } else {
             navigation.replace(ROUTES.LOGIN);

@@ -1,6 +1,7 @@
 export const API_ROUTES = {
   AUTH: {
     LOGIN_HUB_MANAGER: '/hub_auth/login',
+    LOGIN_PARCEL_RIDER: '/rider/login',
   },
 
   TASKS: {
