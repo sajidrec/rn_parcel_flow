@@ -52,22 +52,21 @@ const CreateTaskScreen = () => {
     return true;
   };
 
-  const pickImages = async () => {
-    const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+  const captureImage = async () => {
+    const { status } = await ImagePicker.requestCameraPermissionsAsync();
 
     if (status !== 'granted') {
-      Alert.alert('Permission denied', 'Gallery access is required.');
+      Alert.alert('Permission denied', 'Camera access is required.');
       return;
     }
 
-    const result = await ImagePicker.launchImageLibraryAsync({
+    const result = await ImagePicker.launchCameraAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      allowsMultipleSelection: true,
       quality: 0.8,
     });
 
     if (!result.canceled) {
-      setImages(result.assets.map(item => item.uri));
+      setImages([result.assets[0].uri]);
     }
   };
 
@@ -108,7 +107,7 @@ const CreateTaskScreen = () => {
   const handleCreateTask = async () => {
     setCreateTaskLoading(true);
     if (!images.length) {
-      Alert.alert('Please select at least one image');
+      Alert.alert('Please capture an image');
       setCreateTaskLoading(false);
       return;
     }
@@ -169,9 +168,9 @@ const CreateTaskScreen = () => {
   return (
     <ScrollView contentContainerStyle={{ padding: 16 }}>
 
-      <Pressable onPress={pickImages} style={{ borderWidth: 1, borderColor: '#070708', padding: 10, borderRadius: 5, marginBottom: 15 }}  >
+      <Pressable onPress={captureImage} style={{ borderWidth: 1, borderColor: '#070708', padding: 10, borderRadius: 5, marginBottom: 15 }}  >
         <Text style={{ color: '#0e1013', justifyContent: 'center', alignItems: 'center', fontSize: 16, fontWeight: '500' }}>
-          + Select Images *
+          + Capture Image *
         </Text>
       </Pressable>
 
