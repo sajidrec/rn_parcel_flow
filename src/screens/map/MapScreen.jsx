@@ -1,9 +1,10 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { View, Text, Alert, StyleSheet, Dimensions } from 'react-native';
 import MapView, { Marker, UrlTile, Polyline } from 'react-native-maps';
 import { useRoute, useNavigation } from '@react-navigation/native';
 import ButtonComponent from '../../components/ButtonComponent';
 import SizedBox from '../../components/SizedBox';
+import * as Location from 'expo-location';
 
 const MapScreen = () => {
   const route = useRoute();
@@ -11,11 +12,66 @@ const MapScreen = () => {
   const task = route.params?.task;
 
   const [region, setRegion] = useState({
-    latitude: 23.7806,
-    longitude: 90.4193,
+    latitude: task.sourceLocation?.latitude || 0,
+    longitude: task.sourceLocation?.longitude || 0,
     latitudeDelta: 0.035,
     longitudeDelta: 0.035,
   });
+
+  const [currentLocation, setCurrentLocation] = useState(task.sourceLocation);
+
+  useEffect(() => {
+    let intervalId;
+
+    const startTracking = async () => {
+      const { status } = await Location.requestForegroundPermissionsAsync();
+
+      if (status !== 'granted') {
+        Alert.alert('Permission denied', 'Location permission is required');
+        return;
+      }
+
+      const updateLocation = async () => {
+        try {
+          const location = await Location.getCurrentPositionAsync({
+            accuracy: Location.Accuracy.High,
+          });
+
+          setCurrentLocation({
+            latitude: location.coords.latitude,
+            longitude: location.coords.longitude,
+            name: 'Product Location',
+          });
+
+          setRegion(
+            {
+              latitude: location.coords.latitude || 0,
+              longitude: location.coords.longitude || 0,
+              latitudeDelta: 0.035,
+              longitudeDelta: 0.035,
+            }
+          );
+          console.log('location updated');
+        } catch (error) {
+          console.log('Location error:', error);
+        }
+      };
+
+      // Initial fetch
+      await updateLocation();
+
+      // Update every 5 seconds
+      intervalId = setInterval(updateLocation, 5000);
+    };
+
+    startTracking();
+
+    return () => {
+      if (intervalId) {
+        clearInterval(intervalId);
+      }
+    };
+  }, []);
 
   if (!task) {
     return (
@@ -26,7 +82,7 @@ const MapScreen = () => {
     );
   }
 
-  const sourceLocation = task.sourceLocation;
+  const sourceLocation = currentLocation;
   const destLocation = task.destinationLocation;
 
   const hasSource = sourceLocation?.latitude && sourceLocation?.longitude;
@@ -54,16 +110,9 @@ const MapScreen = () => {
 
       <MapView
         style={styles.map}
-        initialRegion={region}
-        onRegionChangeComplete={(reg) => setRegion(reg)}
+        region={region}
+        onRegionChangeComplete={setRegion}
       >
-        {/* <UrlTile
-          urlTemplate="https://www.openstreetmap.org/#map=19/23.793698/90.410935"
-
-          maximumZ={10}
-
-          flipY={false}
-        /> */}
 
         {hasSource && (
           <Marker
