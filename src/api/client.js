@@ -29,7 +29,7 @@ apiClient.interceptors.request.use(
 apiClient.interceptors.response.use(
   (response) => response,
   async (error) => {
-    if (error.response?.status === 401) {
+    if (error.response?.status === 401 && !error?.config?.skipAuth) {
       console.log('Session expired, please log in again.');
 
       await logout();
