@@ -10,8 +10,8 @@
 Clone the repository and install dependencies:
 
 ```bash
-git clone <https://github.com/sajidrec/rn_parcel_flow>
-cd <rn_parcel_flow>
+git clone https://github.com/sajidrec/rn_parcel_flow
+cd rn_parcel_flow
 npm install
 ```
 
