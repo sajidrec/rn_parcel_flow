@@ -9,6 +9,7 @@ import ButtonComponent from '../../components/ButtonComponent';
 import { updateTask } from '../../api/tasks';
 import { Alert } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import { ActivityIndicator } from 'react-native';
 
 
 const HubUpdateTaskScreen = () => {
@@ -129,7 +130,7 @@ const HubUpdateTaskScreen = () => {
 
       <SizedBox />
 
-      {updateTaskLoading ? <Text style={{ textAlign: 'center', fontSize: 16, }}>Loading...</Text> : <ButtonComponent
+      {updateTaskLoading ? <ActivityIndicator size={'large'} color={'green'} /> : <ButtonComponent
         title="Update Task"
         onPress={handleUpdateTask}
       />}

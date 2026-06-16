@@ -1,4 +1,4 @@
-import { Text, Alert, Pressable, View } from 'react-native'
+import { Text, Alert, Pressable, View, Image } from 'react-native'
 import { useState } from 'react';
 import * as ImagePicker from 'expo-image-picker';
 import { useEffect } from 'react';
@@ -11,6 +11,8 @@ import { Picker } from '@react-native-picker/picker';
 import ButtonComponent from '../../components/ButtonComponent';
 import { createTask } from '../../api/tasks';
 import { useNavigation } from '@react-navigation/native';
+import { ActivityIndicator } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 
 const CreateTaskScreen = () => {
 
@@ -108,25 +110,34 @@ const CreateTaskScreen = () => {
   const handleCreateTask = async () => {
     setCreateTaskLoading(true);
     if (!images.length) {
-      Alert.alert('Please capture an image');
+      Alert.alert(
+        'Photo Required',
+        'Capture a product photo to continue.'
+      );
       setCreateTaskLoading(false);
       return;
     }
 
     if (!title.trim()) {
-      Alert.alert('Title is required');
+      Alert.alert(
+        'Required Field',
+        'Please enter a product title before creating the task.'
+      );
       setCreateTaskLoading(false);
       return;
     }
 
-    if (!sourceLocation.latitude) {
-      Alert.alert('Source location not found. Please wait for location to load.');
-      setCreateTaskLoading(false);
-      return;
-    }
+    // if (!sourceLocation.latitude) {
+    //   Alert.alert('Source location not found. Please wait for location to load.');
+    //   setCreateTaskLoading(false);
+    //   return;
+    // }
 
     if (!destinationLocation.latitude) {
-      Alert.alert('Destination is required');
+      Alert.alert(
+        'Destination Required',
+        'Please select a destination hub.'
+      );
       setCreateTaskLoading(false);
       return;
     }
@@ -167,60 +178,208 @@ const CreateTaskScreen = () => {
   };
 
   return (
-    <ScrollView contentContainerStyle={{ padding: 16 }}>
 
-      <Pressable onPress={captureImage} style={{ borderWidth: 1, borderColor: '#070708', padding: 10, borderRadius: 5, marginBottom: 15 }}  >
-        <Text style={{ color: '#0e1013', justifyContent: 'center', alignItems: 'center', fontSize: 16, fontWeight: '500' }}>
-          + Capture Image *
-        </Text>
-      </Pressable>
+    <ScrollView contentContainerStyle={{
+      padding: 14,
+    }}>
+      <Text
+        style={{
+          fontSize: 24,
+          fontWeight: '700',
+          marginBottom: 4,
+        }}
+      >
+        Create Task
+      </Text>
 
-      <View>
-        <Text style={{ fontSize: 12, color: "#484444" }}>
-          {images.length > 0
-            ? `${images.length} image(s) selected`
-            : 'No images selected'}
-        </Text>
+      <Text
+        style={{
+          color: '#6B7280',
+          marginBottom: 24,
+        }}
+      >
+        Add a new delivery task
+      </Text>
 
-      </View>
+      {images.length === 0 ? (
+        <Pressable
+          onPress={captureImage}
+          style={{
+            borderWidth: 2,
+            borderStyle: 'dashed',
+            borderColor: '#D1D5DB',
+            borderRadius: 16,
+            paddingVertical: 30,
+            alignItems: 'center',
+            backgroundColor: '#FAFAFA',
+          }}
+        >
+          <Ionicons name="camera-outline" size={60} color="#6B7280" />
+
+          <Text
+            style={{
+              marginTop: 8,
+              fontSize: 16,
+              fontWeight: '600',
+            }}
+          >
+            Capture Product Photo <Text style={{ color: 'red' }}>*</Text>
+          </Text>
+
+          <Text
+            style={{
+              color: '#6B7280',
+              marginTop: 4,
+              fontSize: 13,
+            }}
+          >
+            Tap to open camera
+          </Text>
+        </Pressable>
+      ) : (
+        <View
+          style={{
+            borderRadius: 16,
+            overflow: 'hidden',
+            backgroundColor: '#FFF',
+            borderWidth: 1,
+            borderColor: '#E5E7EB',
+            elevation: 2,
+          }}
+        >
+          <Image
+            source={{ uri: images[0] }}
+            style={{
+              width: '100%',
+              aspectRatio: 4 / 3,
+            }}
+            resizeMode="cover"
+          />
+
+          <Pressable
+            onPress={captureImage}
+            style={{
+              position: 'absolute',
+              top: 12,
+              right: 12,
+              backgroundColor: 'rgba(0,0,0,0.7)',
+              flexDirection: 'row',
+              alignItems: 'center',
+              paddingHorizontal: 12,
+              paddingVertical: 8,
+              borderRadius: 20,
+            }}
+          >
+            <Ionicons name="camera-reverse-outline" size={16} color="white" />
+            <Text
+              style={{
+                color: 'white',
+                marginLeft: 6,
+                fontWeight: '600',
+              }}
+            >
+              Retake
+            </Text>
+          </Pressable>
+
+          <View
+            style={{
+              padding: 12,
+            }}
+          >
+            <Text
+              style={{
+                color: '#16A34A',
+                fontWeight: '600',
+              }}
+            >
+              ✓ Photo captured
+            </Text>
+          </View>
+        </View>
+      )}
 
       <SizedBox height={12} />
 
-      <InputComponent
-        placeholder="Product name"
-        value={title}
-        onChangeText={setTitle}
-        label="Title *"
-      />
+      <View style={{
+        backgroundColor: '#FFF',
+        padding: 16,
+        borderRadius: 12,
+        marginBottom: 16,
+        borderWidth: 1,
+        borderColor: '#E5E7EB',
+      }}>
+        <InputComponent
+          placeholder="Product name"
+          value={title}
+          onChangeText={setTitle}
+          label={
+            <Text>
+              Title <Text style={{ color: "red" }}>*</Text>
+            </Text>
+          }
+        />
 
-      <InputComponent
-        label="Description"
-        placeholder='About product'
-        value={description}
-        onChangeText={setDescription}
-        multiline
-      />
+        <InputComponent
+          label="Description"
+          placeholder='About product'
+          value={description}
+          onChangeText={setDescription}
+          multiline
+        />
+      </View>
 
-      <Text style={{ fontSize: 15, fontWeight: 'bold' }}>
-        Current hub location :
-        {sourcePlaceName}
-      </Text>
+
+
+      <View
+        style={{
+          backgroundColor: '#F3F4F6',
+          padding: 16,
+          borderRadius: 12,
+          borderWidth: 1,
+          borderColor: '#E5E7EB',
+          opacity: 0.8,
+        }}
+      >
+        <Text
+          style={{
+            fontWeight: '600',
+            marginBottom: 6,
+            color: '#9CA3AF',
+          }}
+        >
+          Current Hub Location
+        </Text>
+
+        <Text
+          style={{
+            color: '#6B7280',
+          }}
+        >
+          {sourcePlaceName}
+        </Text>
+      </View>
 
       <SizedBox height={20} />
 
       <View>
-        <Text style={{ marginBottom: 6, fontSize: 15, fontWeight: 'bold' }}>Select Destination *</Text>
+        <Text style={{ marginBottom: 6, fontSize: 15, fontWeight: 'bold' }}>Select Destination <Text style={{ color: 'red' }}>*</Text></Text>
 
         <View
           style={{
             borderWidth: 1,
-            borderColor: '#ccc',
-            borderRadius: 8,
-            overflow: 'hidden',
+            borderColor: '#E5E7EB',
+            borderRadius: 12,
+            backgroundColor: '#FFF',
           }}
         >
           <Picker
             selectedValue={destinationLocation.name}
+            dropdownIconColor="#4F46E5"
+            style={{
+              height: 55,
+              color: "#111827",
+            }}
             onValueChange={(value) =>
               setDestinationLocation({
                 name: value,
@@ -230,16 +389,16 @@ const CreateTaskScreen = () => {
             }
           >
             <Picker.Item label="Select destination..." value="" />
-            <Picker.Item label="Gulshan" value="Gulshan" />
-            <Picker.Item label="Banani" value="Banani" />
-            <Picker.Item label="Badda" value="Badda" />
+            <Picker.Item label="📍 Gulshan" value="Gulshan" />
+            <Picker.Item label="📍 Banani" value="Banani" />
+            <Picker.Item label="📍 Badda" value="Badda" />
           </Picker>
         </View>
       </View>
 
       <SizedBox />
 
-      {createTaskLoading ? <Text style={{ textAlign: 'center', fontSize: 16, }}>Loading...</Text> : <ButtonComponent
+      {createTaskLoading ? <ActivityIndicator size={'large'} color={'green'} /> : <ButtonComponent
         title="Create Task"
         onPress={handleCreateTask}
       />}

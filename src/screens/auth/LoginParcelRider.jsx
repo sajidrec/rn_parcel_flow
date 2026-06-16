@@ -9,6 +9,7 @@ import ROUTES from '../../navigation/routes'
 import { login } from '../../api/auth_rider'
 import { saveUserInfo } from '../../storage/auth_storage'
 import { ToastAndroid } from 'react-native'
+import { ActivityIndicator } from 'react-native'
 
 
 const LoginParcelRider = () => {
@@ -65,7 +66,7 @@ const LoginParcelRider = () => {
 
       <InputComponent inputWidth='80%' type='password' value={pass} onChangeText={setPass} label='Enter password' />
 
-      {loading ? <Text>Loading...</Text> : <ButtonComponent width='80%' title='Login' onPress={tryLogin} />}
+      {loading ? <ActivityIndicator size={'large'} color={'green'} /> : <ButtonComponent width='80%' title='Login' onPress={tryLogin} />}
 
 
     </View>

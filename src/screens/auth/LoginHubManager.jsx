@@ -8,6 +8,7 @@ import { useNavigation } from '@react-navigation/native'
 import ROUTES from '../../navigation/routes'
 import { login } from '../../api/auth_hub_manager'
 import { saveToken, saveUserInfo } from '../../storage/auth_storage'
+import { ActivityIndicator } from 'react-native'
 
 const LoginHubManager = () => {
 
@@ -60,7 +61,7 @@ const LoginHubManager = () => {
 
       <InputComponent inputWidth='80%' type='password' value={pass} onChangeText={setPass} label='Enter password' />
 
-      {loading ? <Text>Loading...</Text> : <ButtonComponent width='80%' title='Login' onPress={tryLogin} disabled={loading} />} 
+      {loading ? <ActivityIndicator size={'large'} color={'green'} /> : <ButtonComponent width='80%' title='Login' onPress={tryLogin} disabled={loading} />}
 
     </View>
   )
