@@ -86,7 +86,7 @@ const HubUpdateTaskScreen = () => {
         placeholder="Product name"
         value={title}
         onChangeText={setTitle}
-        label="Title *"
+        label={<Text>Title <Text style={{ color: 'red' }}>*</Text></Text>}
       />
 
       <InputComponent
@@ -100,7 +100,7 @@ const HubUpdateTaskScreen = () => {
       <SizedBox height={20} />
 
       <View>
-        <Text style={{ marginBottom: 6, fontSize: 15, fontWeight: 'bold' }}>Select Destination *</Text>
+        <Text style={{ marginBottom: 6, fontSize: 15, fontWeight: 'bold' }}>Select Destination <Text style={{ color: 'red' }}>*</Text></Text>
 
         <View
           style={{

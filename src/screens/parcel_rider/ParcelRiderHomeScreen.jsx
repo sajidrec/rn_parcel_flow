@@ -89,19 +89,64 @@ const ParcelRiderHomeScreen = () => {
         onRefresh={onRefresh}
         renderItem={({ item }) => (
           console.log(item),
-          <View style={{ marginBottom: 16 }}>
-            <Text style={{ fontSize: 18, fontWeight: 'bold' }}>{item.title}</Text>
-            <Text style={{ fontSize: 16, color: '#333' }}>{item.description}</Text>
-            <Text style={{ fontSize: 16, color: '#333' }}>Destination Hub : {item.destinationLocation?.name ?? 'N/A'}</Text>
+          <View style={{
+            backgroundColor: '#FFF',
+            borderRadius: 16,
+            padding: 16,
+            marginBottom: 16,
+            borderWidth: 1,
+            borderColor: '#E5E7EB',
+            elevation: 2,
+          }}>
+
+
+            <Text style={{
+              fontSize: 18,
+              fontWeight: '700',
+              color: '#111827',
+            }}>{item.title}</Text>
+            <Text style={{
+              color: '#6B7280',
+            }}>{item.description}</Text>
+            <View
+              style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+                marginTop: 12,
+              }}
+            >
+              <Text
+                style={{
+                  fontSize: 13,
+                  color: '#9CA3AF',
+                  fontWeight: '600',
+                }}
+              >
+                DESTINATION
+              </Text>
+
+              <Text
+                style={{
+                  marginLeft: 8,
+                  fontWeight: '600',
+                  color: '#111827',
+                }}
+              >
+                {item.destinationLocation?.name ?? 'N/A'}
+              </Text>
+            </View>
             {item.images?.length > 0 && (
               <Image
                 source={{
                   uri: `${API_BASE_URL}/uploads/tasks/${item.images[0]}`,
                 }}
                 style={{
-                  resizeMode: 'contain',
-                  height: 200,
+                  width: '100%',
+                  aspectRatio: 16 / 9,
+                  borderRadius: 12,
+                  marginTop: 12,
                 }}
+                resizeMode="cover"
               />
             )}
 
