@@ -86,18 +86,35 @@ const ParcelRiderHomeScreen = () => {
         refreshing={refreshing}
         onRefresh={onRefresh}
         renderItem={({ item }) => (
-          <View style={{ marginBottom: 16 }}>
-            <Text style={{ fontSize: 18, fontWeight: 'bold' }}>{item.title}</Text>
-            <Text style={{ fontSize: 16, color: '#333' }}>{item.description}</Text>
+          <View style={{
+            backgroundColor: '#FFF',
+            borderRadius: 16,
+            padding: 16,
+            marginBottom: 16,
+            borderWidth: 1,
+            borderColor: '#E5E7EB',
+            elevation: 2,
+          }}>
+            <Text style={{
+              fontSize: 18,
+              fontWeight: '700',
+              color: '#111827',
+            }}>{item.title}</Text>
+            <Text style={{
+              color: '#6B7280',
+            }}>{item.description}</Text>
             {item.images?.length > 0 && (
               <Image
                 source={{
                   uri: `${API_BASE_URL}/uploads/tasks/${item.images[0]}`,
                 }}
                 style={{
-                  resizeMode: 'contain',
-                  height: 200,
+                  width: '100%',
+                  aspectRatio: 16 / 9,
+                  borderRadius: 12,
+                  marginTop: 12,
                 }}
+                resizeMode="cover"
               />
             )}
 
@@ -156,8 +173,39 @@ const ParcelRiderHomeScreen = () => {
       />
 
       <SizedBox height={25} />
-      <ButtonComponent width='95%' title='Create New Task' bgColor='#156920' onPress={() => navigation.navigate(ROUTES.CREATE_TASK)} />
-      <SizedBox />
+      {/* <ButtonComponent width='95%' title='Create New Task' bgColor='#156920' onPress={() => navigation.navigate(ROUTES.CREATE_TASK)} /> */}
+      {/* <SizedBox /> */}
+
+      <Pressable
+        onPress={() => navigation.navigate(ROUTES.CREATE_TASK)}
+        style={{
+          position: 'absolute',
+          right: 20,
+          bottom: 25,
+
+          width: 64,
+          height: 64,
+
+          borderRadius: 32,
+
+          backgroundColor: '#16A34A',
+
+          justifyContent: 'center',
+          alignItems: 'center',
+
+          elevation: 8,
+        }}
+      >
+        <Text
+          style={{
+            color: '#FFF',
+            fontSize: 32,
+            fontWeight: '700',
+          }}
+        >
+          +
+        </Text>
+      </Pressable>
 
     </View>
   )
